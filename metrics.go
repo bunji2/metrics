@@ -16,7 +16,7 @@ type Data struct {
 	totalTN  int
 }
 
-// New :
+// New : クラス数 numClass のメトリクス用データを作成。0<=classID<numClass
 func New(numClass int) (r *Data) {
 	r = &Data{
 		numClass: numClass,
@@ -29,7 +29,7 @@ func New(numClass int) (r *Data) {
 }
 
 // Add : クラスごとの予測と回答を追加する
-//   classID --- クラスの識別子
+//   classID --- クラスの識別子 0<=classID<numClass
 //   pred --- 予測 (1 or 0) 1:classIDであると予測 / 0:classIDではないと予測
 //   answer --- 回答 (1 or 0) 1:classIDが回答 / 0:classID以外が回答
 func (md *Data) Add(classID, pred, answer int) {
@@ -50,8 +50,8 @@ func (md *Data) Add(classID, pred, answer int) {
 }
 
 // AddClassID : クラスごとの予測と回答を追加する
-//   predClassID --- 予測したクラス
-//   answerClassID --- 回答となるクラス
+//   predClassID --- 予測したクラス 0<=predClassID<numClass
+//   answerClassID --- 回答となるクラス 0<=answerClassID<numClass
 func (md *Data) AddClassID(predClassID, answerClassID int) (err error) {
 	var predOneHot, answerOneHot []float32
 	predOneHot, err = ToOneHot(predClassID, md.numClass)
@@ -69,8 +69,8 @@ func (md *Data) AddClassID(predClassID, answerClassID int) (err error) {
 }
 
 // AddLabels : マルチラベルの予測と回答を追加する
-//   predLabels --- 予測したマルチラベル
-//   answerLabels --- 回答となるマルチラベル
+//   predLabels --- 予測したマルチラベル 0<=predLabels[i]<numClass
+//   answerLabels --- 回答となるマルチラベル 0<=answerLabels[i]<numClass
 func (md *Data) AddLabels(predLabels, answerLabels []int) (err error) {
 	for j := 0; j < md.numClass; j++ {
 		md.Add(j, predLabels[j], answerLabels[j])
@@ -191,7 +191,6 @@ func (md *Data) MacroMetrics() (macroPrecision, macroRecall, macroFMeasure, aver
 }
 
 // ToOneHot : スカラー値をクラス数 numClass の one-hot 形式の配列に変換
-//            逆は MaxIndex。
 func ToOneHot(classID, numClass int) (r []float32, err error) {
 	if classID < 0 || classID >= numClass {
 		err = fmt.Errorf("ToOneHot: classID(%d) is abnormal value against numClass(%d)", classID, numClass)
