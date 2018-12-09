@@ -70,7 +70,7 @@ func (md *Data) AddClassID(predClassID, answerClassID int) (err error) {
 
 // AddLabels : マルチラベルの予測と回答を追加する
 //   predLabels --- 予測したマルチラベル
-//   answerLabels --- 回答となるクラス
+//   answerLabels --- 回答となるマルチラベル
 func (md *Data) AddLabels(predLabels, answerLabels []int) (err error) {
 	for j := 0; j < md.numClass; j++ {
 		md.Add(j, predLabels[j], answerLabels[j])
