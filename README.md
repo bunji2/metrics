@@ -1,7 +1,6 @@
 # metrics
 Sample of metrics by GoLang
 
-+ TP/TN/FP/FN
 + Micro/Macro Precscion
 + Micro/Macro Recall
 + Micro/Macro F-measure
